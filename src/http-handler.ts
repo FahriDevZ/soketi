@@ -42,6 +42,7 @@ export class HttpHandler {
 
     acceptTraffic(res: HttpResponse) {
         this.attachMiddleware(res, [
+            this.corkMiddleware,
             this.corsMiddleware,
         ]).then(res => {
             if (this.server.closing) {
