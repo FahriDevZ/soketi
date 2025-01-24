@@ -288,6 +288,7 @@ export class HttpHandler {
 
     batchEvents(res: HttpResponse) {
         this.attachMiddleware(res, [
+            this.corkMiddleware,
             this.jsonBodyMiddleware,
             this.corsMiddleware,
             this.appMiddleware,
@@ -317,6 +318,7 @@ export class HttpHandler {
 
     terminateUserConnections(res: HttpResponse) {
         this.attachMiddleware(res, [
+            this.corkMiddleware,
             this.jsonBodyMiddleware,
             this.corsMiddleware,
             this.appMiddleware,
@@ -396,12 +398,11 @@ export class HttpHandler {
 
     notFound(res: HttpResponse) {
         try {
-            res.writeStatus('404 Not Found');
-
             this.attachMiddleware(res, [
                 this.corkMiddleware,
                 this.corsMiddleware,
             ]).then(res => {
+                res.writeStatus('404 Not Found');
                 this.send(res, '', '404 Not Found');
             });
         } catch (e) {
